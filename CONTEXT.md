@@ -2,7 +2,7 @@
 
 Memoria técnica pública del proyecto. Debe bastar para reconstruir o reorientar el sitio sin ninguna otra fuente. No contiene datos privados: ni credenciales, ni la dirección de destino del correo, ni notas personales.
 
-Última actualización: 2026-11-06.
+Última actualización: 2026-11-13.
 
 ## Propósito
 
@@ -15,7 +15,7 @@ Los humanos son audiencia secundaria: el sitio es sobrio, rápido y legible, per
 | Fase | Contenido | Estado |
 |---|---|---|
 | 0 | Decisiones previas | Hecha |
-| 1 | Repo, workflow, página de prueba `noindex`; dominio, HTTPS y redirección de `www` | En curso |
+| 1 | Repo, workflow, página de prueba `noindex`; dominio, HTTPS y redirección de `www` | Falta verificar.sh |
 | 2 | Esqueleto Hugo, esquema de `data/`, plantillas, JSON-LD, licencias REUSE | Pendiente |
 | 3 | Contenido: CV, credenciales, hitos, libro | Pendiente |
 | 4 | Validación: `curl`, schema.org, Rich Results, Lighthouse, prueba con LLM | Pendiente |
@@ -83,7 +83,7 @@ Se eliminan los registros por defecto de Porkbun: `ALIAS` del apex y `CNAME` com
 
 Ningún registro comodín. Valores de GitHub según su documentación, consultada el 2026-11-06.
 
-**Correo:** reenvío de Porkbun de `contact@` a un buzón privado, no documentado aquí. Solo recibe.
+**Correo:** reenvío de Porkbun de `contact@` a un buzón privado, no documentado aquí. Reenvío operativo desde 2026-11-13, probado con envío externo. Solo recibe.
 
 **GitHub Pages:** fuente «GitHub Actions»; dominio personalizado `aitorrioja.com`; «Enforce HTTPS» activado; certificado gestionado por GitHub.
 
