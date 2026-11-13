@@ -1,0 +1,6 @@
+# Fase 1: configuración mínima. Solo genera la portada de prueba.
+baseURL = "https://aitorrioja.com/"
+locale = "es-ES"
+defaultContentLanguage = "es"
+title = "Aitor Rioja"
+disableKinds = ["section", "taxonomy", "term", "rss", "sitemap", "robotstxt", "404"]
