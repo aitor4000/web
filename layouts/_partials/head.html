@@ -1,0 +1,33 @@
+{{- $lang := site.Language.Lang -}}
+{{- $desc := .Description | default (partial "tr.html" hugo.Data.profile.headline) -}}
+{{- $title := .Title -}}
+{{- if not .IsHome -}}{{- $title = printf "%s | %s" .Title site.Title -}}{{- end -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+{{ if site.Params.noindex }}<meta name="robots" content="noindex">{{ end }}
+<link rel="canonical" href="{{ .Permalink }}">
+{{ range .AllTranslations }}<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
+{{ end }}
+{{ range where .AllTranslations "Language.Lang" site.Params.defaultLang }}<link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+{{ end }}
+<link rel="license" href="{{ site.Params.licenseContent }}">
+{{ with site.Home.OutputFormats.Get "resume" }}<link rel="alternate" type="application/json" title="JSON Resume" href="{{ .Permalink }}">{{ end }}
+{{ with site.Home.OutputFormats.Get "llms" }}<link rel="alternate" type="text/plain" title="llms.txt" href="{{ .Permalink }}">{{ end }}
+{{ with site.GetPage "hitos" }}{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" title="{{ i18n "feedTitle" }}" href="{{ .Permalink }}">{{ end }}{{ end }}
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:locale" content="{{ replace site.Language.Locale "-" "_" }}">
+{{ range .Translations }}<meta property="og:locale:alternate" content="{{ replace .Language.Locale "-" "_" }}">
+{{ end }}
+<meta property="og:image" content="{{ site.Params.ogImage | absURL }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ site.Title }}, aitorrioja.com">
+<meta name="twitter:card" content="summary_large_image">
+{{ partial "jsonld.html" . }}
+{{ $css := resources.Get "css/main.css" | minify }}<style>{{ $css.Content | safeCSS }}</style>

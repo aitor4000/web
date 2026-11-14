@@ -1,0 +1,20 @@
+{{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ i18n "feedTitle" }}</title>
+    <link>{{ .Permalink }}</link>
+    <description>{{ .Description }}</description>
+    <language>{{ site.Language.Lang }}</language>
+    {{ with .OutputFormats.Get "rss" }}{{ printf "<atom:link href=%q rel=\"self\" type=\"application/rss+xml\"/>" .Permalink | safeHTML }}{{ end }}
+    {{ range sort hugo.Data.milestones "date" "desc" }}
+    {{ $d := printf "%v" .date }}{{ if eq (len $d) 7 }}{{ $d = printf "%s-01" $d }}{{ end }}
+    <item>
+      <title>{{ partial "tr.html" .title }}</title>
+      <link>{{ $.Permalink }}#{{ .id }}</link>
+      <guid isPermaLink="true">{{ $.Permalink }}#{{ .id }}</guid>
+      <pubDate>{{ (time.AsTime $d).Format "Mon, 02 Jan 2006 15:04:05 -0700" }}</pubDate>
+      <description>{{ partial "tr.html" .summary }}</description>
+    </item>
+    {{ end }}
+  </channel>
+</rss>

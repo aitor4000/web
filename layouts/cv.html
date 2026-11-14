@@ -1,0 +1,76 @@
+{{ define "main" }}
+{{ $p := hugo.Data.profile }}
+<h1>{{ .Title }}</h1>
+<p class="lead">{{ partial "tr.html" $p.headline }}</p>
+
+{{ with hugo.Data.experience }}
+<section aria-labelledby="h-exp">
+  <h2 id="h-exp">{{ i18n "experience" }}</h2>
+  {{ range . }}
+  <article class="entry">
+    {{ with .start }}<p class="when">{{ i18n "current" }} <time datetime="{{ . }}">{{ partial "datefmt.html" . }}</time></p>{{ end }}
+    <div>
+      <h3>{{ partial "tr.html" .role }}</h3>
+      <p>{{ partial "tr.html" .organization }}</p>
+    </div>
+  </article>
+  {{ end }}
+</section>
+{{ end }}
+
+{{ with hugo.Data.education }}
+<section aria-labelledby="h-edu">
+  <h2 id="h-edu">{{ i18n "education" }}</h2>
+  {{ range . }}
+  <article class="entry">
+    <p class="when">{{ with .start }}{{ . }}{{ end }}{{ with .end }} a {{ . }}{{ end }}</p>
+    <div>
+      <h3>{{ partial "tr.html" .title }}</h3>
+      <p>{{ partial "tr.html" .institution }}</p>
+    </div>
+  </article>
+  {{ end }}
+</section>
+{{ end }}
+
+{{ with hugo.Data.credentials }}
+<section aria-labelledby="h-cred">
+  <h2 id="h-cred">{{ i18n "credentials" }}</h2>
+  {{ range . }}
+  {{ $c := . }}
+  <article class="entry">
+    <p class="when">{{ with .date }}<time datetime="{{ . }}">{{ partial "datefmt.html" . }}</time>{{ end }}</p>
+    <div>
+      <h3>{{ with .url }}<a href="{{ . }}">{{ partial "tr.html" $c.name }}</a>{{ else }}{{ partial "tr.html" $c.name }}{{ end }}</h3>
+      {{ with .issuer }}<p>{{ . }}</p>{{ end }}
+    </div>
+  </article>
+  {{ end }}
+</section>
+{{ end }}
+
+<section aria-labelledby="h-know">
+  <h2 id="h-know">{{ i18n "knowsAbout" }}</h2>
+  <ul class="tags">
+    {{ range $p.knowsAbout }}<li>{{ partial "tr.html" . }}</li>
+    {{ end }}
+  </ul>
+</section>
+
+<section aria-labelledby="h-lang">
+  <h2 id="h-lang">{{ i18n "languages" }}</h2>
+  <ul class="tags">
+    {{ range $p.languages }}<li>{{ partial "tr.html" .name }}</li>
+    {{ end }}
+  </ul>
+</section>
+
+<section aria-labelledby="h-prof">
+  <h2 id="h-prof">{{ i18n "profiles" }}</h2>
+  <ul class="plain">
+    {{ range $p.links }}<li><a{{ if .rel_me }} rel="me"{{ end }} href="{{ .url }}">{{ .network }}</a></li>
+    {{ end }}
+    <li><a href="mailto:{{ $p.email }}">{{ $p.email }}</a></li>
+  </ul>
+</section>
+{{ end }}

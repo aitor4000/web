@@ -1,0 +1,32 @@
+# Identidad y perfil. Los textos con claves es/en se muestran según el idioma de la página.
+name: Aitor Rioja
+givenName: Aitor
+familyName: Rioja
+email: contact@aitorrioja.com
+location:
+  city: Bilbao
+  country: ES
+headline:
+  es: "Prompting y uso aplicado de asistentes de IA. Autor de «Charlando con la IA». Sales Manager en desalación y tratamiento de aguas industriales."
+  en: "Prompting and applied use of AI assistants. Author of “Charlando con la IA”. Sales Manager in desalination and industrial water treatment."
+bio:
+  es: "Aitor Rioja es autor de «Charlando con la IA», una guía práctica de 18 lecciones sobre prompting para asistentes de IA, de descarga gratuita. Trabaja en el área comercial B2B de una empresa del sector de la desalación y el tratamiento de aguas industriales. Vive en Bilbao."
+  en: "Aitor Rioja is the author of “Charlando con la IA”, a practical guide in Spanish with 18 lessons on prompting AI assistants, free to download. He works in B2B sales at a company in the desalination and industrial water treatment sector. He lives in Bilbao."
+knowsAbout:
+  - { es: "Ingeniería de prompts", en: "Prompt engineering" }
+  - { es: "Modelos de lenguaje", en: "Large language models" }
+  - { es: "IA generativa", en: "Generative AI" }
+  - { es: "Asistentes de IA", en: "AI assistants" }
+  - { es: "Desalación", en: "Desalination" }
+  - { es: "Tratamiento de aguas industriales", en: "Industrial water treatment" }
+  - { es: "Ventas B2B", en: "B2B sales" }
+languages:
+  - { code: es, name: { es: "Español", en: "Spanish" } }
+# Perfiles externos. same_as alimenta sameAs del JSON-LD; rel_me añade rel="me" al enlace visible.
+links:
+  - network: GitHub
+    username: aitor4000
+    url: https://github.com/aitor4000
+    same_as: true
+    rel_me: true
+# Pendiente: LinkedIn (URL del perfil público).

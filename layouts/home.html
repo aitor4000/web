@@ -1,20 +1,39 @@
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<meta name="build" content="{{ now.UTC.Format "2006-01-02T15:04:05Z" }}">
-<title>{{ site.Title }}</title>
-<style>
-:root { color-scheme: light dark; }
-body { margin: 0 auto; max-width: 38rem; padding: 4rem 1.25rem; font: 1.125rem/1.6 system-ui, sans-serif; }
-</style>
-</head>
-<body>
-<main>
-<h1>{{ site.Title }}</h1>
-<p>Sitio en preparación.</p>
-</main>
-</body>
-</html>
+{{ define "main" }}
+{{ $p := hugo.Data.profile }}
+<article class="h-card profile">
+  <h1 class="p-name">{{ $p.name }}</h1>
+  <p class="headline p-note">{{ partial "tr.html" $p.headline }}</p>
+  <p class="bio">{{ partial "tr.html" $p.bio }}</p>
+  <ul class="facts">
+    <li><span class="p-locality">{{ $p.location.city }}</span></li>
+    <li><a class="u-url u-uid" href="{{ site.Home.Permalink }}">aitorrioja.com</a></li>
+    <li><a class="u-email" href="mailto:{{ $p.email }}">{{ $p.email }}</a></li>
+    {{ range $p.links }}<li><a class="u-url"{{ if .rel_me }} rel="me"{{ end }} href="{{ .url }}">{{ .network }}</a></li>
+    {{ end }}
+  </ul>
+</article>
+
+{{ $b := hugo.Data.book }}
+<section aria-labelledby="h-libro">
+  <h2 id="h-libro">{{ i18n "bookFeature" }}</h2>
+  <p><cite>{{ partial "tr.html" $b.title }}</cite>. {{ partial "tr.html" $b.subtitle }}.</p>
+  <p>{{ partial "tr.html" $b.synopsis }}</p>
+  <p><a href="{{ with site.GetPage "libro" }}{{ .RelPermalink }}{{ end }}">{{ i18n "bookMore" }}</a></p>
+</section>
+
+{{ with sort hugo.Data.milestones "date" "desc" }}
+<section aria-labelledby="h-hitos">
+  <h2 id="h-hitos">{{ i18n "latestMilestones" }}</h2>
+  <ul class="plain">
+    {{ range first 3 . }}
+    <li>
+      <time datetime="{{ .date }}">{{ partial "datefmt.html" .date }}</time>
+      <strong>{{ partial "tr.html" .title }}</strong>
+      <span>{{ partial "tr.html" .summary }}</span>
+    </li>
+    {{ end }}
+  </ul>
+  <p><a href="{{ with site.GetPage "hitos" }}{{ .RelPermalink }}{{ end }}">{{ i18n "allMilestones" }}</a></p>
+</section>
+{{ end }}
+{{ end }}

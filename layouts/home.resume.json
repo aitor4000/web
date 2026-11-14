@@ -1,0 +1,56 @@
+{{- $p := hugo.Data.profile -}}
+{{- $base := strings.TrimSuffix "/" site.BaseURL -}}
+{{- $lang := site.Language.Lang -}}
+{{- $profiles := slice -}}
+{{- range $p.links -}}{{- $profiles = $profiles | append (dict "network" .network "username" .username "url" .url) -}}{{- end -}}
+{{- $work := slice -}}
+{{- range hugo.Data.experience -}}
+  {{- $w := dict "position" (partial "tr.html" .role) "description" (partial "tr.html" .organization) -}}
+  {{- with .start -}}{{- $w = merge $w (dict "startDate" (printf "%v" .)) -}}{{- end -}}
+  {{- with .end -}}{{- $w = merge $w (dict "endDate" (printf "%v" .)) -}}{{- end -}}
+  {{- $work = $work | append $w -}}
+{{- end -}}
+{{- $edu := slice -}}
+{{- range hugo.Data.education -}}
+  {{- $e := dict "institution" (partial "tr.html" .institution) "studyType" (partial "tr.html" .title) -}}
+  {{- with .start -}}{{- $e = merge $e (dict "startDate" (printf "%v" .)) -}}{{- end -}}
+  {{- with .end -}}{{- $e = merge $e (dict "endDate" (printf "%v" .)) -}}{{- end -}}
+  {{- $edu = $edu | append $e -}}
+{{- end -}}
+{{- $certs := slice -}}
+{{- range hugo.Data.credentials -}}
+  {{- $c := dict "name" (partial "tr.html" .name) -}}
+  {{- with .issuer -}}{{- $c = merge $c (dict "issuer" .) -}}{{- end -}}
+  {{- with .date -}}{{- $c = merge $c (dict "date" (printf "%v" .)) -}}{{- end -}}
+  {{- with .url -}}{{- $c = merge $c (dict "url" .) -}}{{- end -}}
+  {{- $certs = $certs | append $c -}}
+{{- end -}}
+{{- $b := hugo.Data.book -}}
+{{- $pubs := slice (dict
+    "name" (partial "tr.html" $b.title)
+    "publisher" $p.name
+    "releaseDate" (printf "%v" $b.date_published)
+    "url" (printf "%s/libro/" $base)
+    "summary" (partial "tr.html" $b.synopsis)) -}}
+{{- $langs := slice -}}
+{{- range $p.languages -}}{{- $langs = $langs | append (dict "language" (partial "tr.html" .name)) -}}{{- end -}}
+{{- $skills := slice -}}
+{{- range $p.knowsAbout -}}{{- $skills = $skills | append (dict "name" (partial "tr.html" .)) -}}{{- end -}}
+{{- $basics := dict
+    "name" $p.name
+    "email" $p.email
+    "url" (printf "%s/" $base)
+    "summary" (partial "tr.html" $p.bio)
+    "location" (dict "city" $p.location.city "countryCode" $p.location.country)
+    "profiles" $profiles -}}
+{{- $resume := dict
+    "$schema" "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json"
+    "basics" $basics
+    "work" $work
+    "education" $edu
+    "certificates" $certs
+    "publications" $pubs
+    "skills" $skills
+    "languages" $langs
+    "meta" (dict "canonical" (printf "%s/resume.json" $base) "version" "v1.0.0" "lastModified" (partial "lastmod.html" .)) -}}
+{{- $resume | jsonify (dict "indent" "  ") -}}

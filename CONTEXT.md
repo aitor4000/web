@@ -15,8 +15,8 @@ Los humanos son audiencia secundaria: el sitio es sobrio, rápido y legible, per
 | Fase | Contenido | Estado |
 |---|---|---|
 | 0 | Decisiones previas | Hecha |
-| 1 | Repo, workflow, página de prueba `noindex`; dominio, HTTPS y redirección de `www` | Falta verificar.sh |
-| 2 | Esqueleto Hugo, esquema de `data/`, plantillas, JSON-LD, licencias REUSE | Pendiente |
+| 1 | Repo, workflow, página de prueba `noindex`; dominio, HTTPS y redirección de `www` | En curso (falta pasar `scripts/verificar.sh` completo) |
+| 2 | Esqueleto Hugo, esquema de `data/`, plantillas, JSON-LD, licencias REUSE | Hecha (sitio con `noindex`) |
 | 3 | Contenido: CV, credenciales, hitos, libro | Pendiente |
 | 4 | Validación: `curl`, schema.org, Rich Results, Lighthouse, prueba con LLM | Pendiente |
 | 5 | Google Search Console y Bing Webmaster Tools | Pendiente |
@@ -65,6 +65,30 @@ GitHub Actions con las acciones oficiales por tag mayor (`checkout@v7`, `configu
 ### 2026-11-06: Limpieza de la zona DNS
 Se eliminan los registros por defecto de Porkbun: `ALIAS` del apex y `CNAME` comodín hacia `uixie.porkbun.com`, el URL forwarding y dos TXT `_acme-challenge` residuales. Motivo: la documentación de GitHub desaconseja los registros comodín porque exponen a la toma de subdominios aunque el dominio esté verificado. Se añade DMARC `p=reject`, ausente en la zona original.
 
+### 2026-11-13: Contacto operativo
+El reenvío de `contact@aitorrioja.com` funciona, probado con un envío desde una dirección ajena al buzón de destino.
+
+### 2026-11-13: Sin `jobTitle` en el JSON-LD
+El nodo `Person` no lleva `jobTitle`. El cargo (Sales Manager, idéntico a LinkedIn) figura en la experiencia del CV y en `resume.json`. Motivo: no posicionar el perfil como comercial y mantener coherencia con LinkedIn. La identidad se apoya en nombre, ciudad, libro, áreas de conocimiento y enlaces verificables. Sin `worksFor`, porque el empleador no se nombra.
+
+### 2026-11-13: Open Graph sin foto
+Tarjeta `static/img/og.png` (1200x630) con nombre y dominio. Sin `og:image` personal.
+
+### 2026-11-13: `noindex` hasta cerrar la Fase 4
+El parámetro `noindex` de `hugo.toml` añade `<meta name="robots" content="noindex">` a todas las páginas. `robots.txt` permite todo, para que los rastreadores puedan leer la etiqueta. Se pone a `false` al cerrar la Fase 4, antes de dar de alta el sitio en buscadores.
+
+### 2026-11-13: URLs bilingües
+Español: `/`, `/cv/`, `/hitos/`, `/libro/`. Inglés: `/en/`, `/en/cv/`, `/en/milestones/`, `/en/book/`. Cada página declara `canonical`, sus `hreflang` y `x-default`. `x-default` apunta a la versión en español de la misma página, no siempre a `/`. Motivo: debe señalar la página equivalente en el idioma por defecto. `/es/` redirige a `/`.
+
+### 2026-11-13: Fecha de modificación
+`dateModified` y `lastmod` del sitio salen de la variable `HUGO_LASTMOD`, que el workflow rellena con el último commit que toca `data/`, `content/`, `i18n/` o `static/libro/`. Es una fecha única para todo el sitio. Sin la variable (build local) se usa la hora actual.
+
+### 2026-11-13: Fechas de hitos
+`date` admite `AAAA`, `AAAA-MM` o `AAAA-MM-DD`, para no inventar un día que no se conoce.
+
+### 2026-11-13: Licencia del libro en REUSE
+El texto de `CC-BY-NC-4.0` entra en `LICENSES/` con el PDF del libro (Fase 3). Sin ningún archivo bajo esa licencia, `reuse lint` marca el texto como sin uso.
+
 ## Infraestructura
 
 **Registrador y DNS:** Porkbun. Nameservers `curitiba`, `fortaleza`, `maceio` y `salvador`, todos en `.ns.porkbun.com`. DNSSEC desactivado.
@@ -83,13 +107,13 @@ Se eliminan los registros por defecto de Porkbun: `ALIAS` del apex y `CNAME` com
 
 Ningún registro comodín. Valores de GitHub según su documentación, consultada el 2026-11-06.
 
-**Correo:** reenvío de Porkbun de `contact@` a un buzón privado, no documentado aquí. Reenvío operativo desde 2026-11-13, probado con envío externo. Solo recibe.
+**Correo:** reenvío de Porkbun de `contact@` a un buzón privado, no documentado aquí. Solo recibe.
 
 **GitHub Pages:** fuente «GitHub Actions»; dominio personalizado `aitorrioja.com`; «Enforce HTTPS» activado; certificado gestionado por GitHub.
 
 ## Desplegar
 
-- Cada push a `main` ejecuta `.github/workflows/pages.yml`, que compila y publica.
+- Cada push a `main` ejecuta `.github/workflows/pages.yml`, que calcula `HUGO_LASTMOD`, compila y publica.
 - Ejecución manual: pestaña Actions → «Publicar en GitHub Pages» → «Run workflow».
 - Previsualización local: `hugo server` y abrir `http://localhost:1313/`. La versión local puede no coincidir con la del workflow; la que vale es la del workflow.
 - Actualizar Hugo: cambiar `HUGO_VERSION` en el workflow (respetando la regla de 14 días), compilar en local y hacer push.
@@ -98,9 +122,57 @@ Ningún registro comodín. Valores de GitHub según su documentación, consultad
 
 `scripts/verificar.sh` contrasta DNS y HTTP con el estado objetivo descrito arriba. Modos: `dns`, `http` o `todo` (por defecto). Sale con código distinto de 0 si algo falla.
 
+## Estructura del repo
+
+```
+CONTEXT.md  README.md  REUSE.toml  hugo.toml
+LICENSES/        textos de licencia (REUSE)
+assets/css/      hoja de estilos, incrustada en cada página
+content/es|en/   páginas mínimas por idioma; el contenido sale de data/
+data/            profile, experience, education, credentials, milestones, book (YAML)
+i18n/            textos de interfaz es y en
+layouts/         plantillas y parciales; JSON-LD en _partials/jsonld.html
+scripts/         verificar.sh
+static/img/      og.png
+static/libro/    PDF del libro (Fase 3)
+```
+
+## Salidas generadas
+
+Todas salen de `data/` en el build y están en ambos idiomas (los del inglés bajo `/en/`):
+
+| Salida | Ruta |
+|---|---|
+| HTML semántico: perfil, CV, hitos, libro | `/`, `/cv/`, `/hitos/`, `/libro/` |
+| JSON-LD (`@graph` con `WebSite`, `Person`, `ProfilePage` o `WebPage`, y `Book` en el libro) | en el `<head>` de cada página |
+| JSON Resume | `/resume.json` |
+| Resumen para modelos (apuesta sin estándar consolidado) | `/llms.txt` |
+| RSS de hitos | `/hitos/index.xml` |
+| Sitemap: índice de Hugo con un archivo por idioma, con `hreflang` | `/sitemap.xml` |
+| `h-card` y enlaces `rel="me"` | portada |
+| Open Graph | `<head>` |
+
 ## Añadir contenido
 
-Se documenta en Fase 2, con el esquema de `data/`.
+Se edita solo `data/`. Desde el móvil: GitHub, abrir el archivo, icono del lápiz, «Commit changes». Cada commit en `main` publica el sitio.
+
+**Hito nuevo:** añadir un bloque a `data/milestones.yaml`.
+
+```yaml
+- id: AAAA-MM-slug
+  date: "AAAA-MM"        # o AAAA, o AAAA-MM-DD; entre comillas
+  type: publication      # publication | certification | project | talk | award | other
+  title:   { es: "...", en: "..." }
+  summary: { es: "...", en: "..." }
+  evidence: https://...  # URL verificable
+  tags: [llm, prompt-engineering]
+```
+
+Los hitos de tipo `award` alimentan `Person.award`. Los de tipo `certification` no generan credencial por sí solos: la credencial se declara en `data/credentials.yaml`, con `name`, `issuer`, `date` y `url` de verificación.
+
+**Otros archivos:** `profile.yaml` (identidad, bio, áreas de conocimiento, enlaces con `same_as` y `rel_me`), `experience.yaml`, `education.yaml`, `credentials.yaml` y `book.yaml`. Una lista vacía (`[]`) no genera sección ni propiedad en el JSON-LD. Los textos con claves `es` y `en` se muestran según el idioma de la página.
+
+**Reglas:** cada logro con evidencia verificable; cargos y fechas idénticos a LinkedIn; sin señal de búsqueda de empleo; sin información interna del empleador.
 
 ## Migrar a otro host
 

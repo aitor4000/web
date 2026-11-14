@@ -1,0 +1,5 @@
+{{- /* Devuelve el texto de un mapa {es: ..., en: ...} en el idioma de la página. */ -}}
+{{- $d := . -}}
+{{- $r := "" -}}
+{{- if reflect.IsMap $d -}}{{- $r = index $d site.Language.Lang -}}{{- else -}}{{- $r = $d -}}{{- end -}}
+{{- return $r -}}

@@ -1,0 +1,24 @@
+version = 1
+SPDX-PackageName = "aitorrioja.com"
+SPDX-PackageDownloadLocation = "https://github.com/aitor4000/web"
+
+# Código y configuración: MIT.
+[[annotations]]
+path = ["layouts/**", "i18n/**", "assets/**", "hugo.toml", "scripts/**", ".github/**", ".gitignore", "REUSE.toml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Aitor Rioja"
+SPDX-License-Identifier = "MIT"
+
+# Contenido, datos y documentación: CC BY 4.0.
+[[annotations]]
+path = ["data/**", "content/**", "static/img/**", "README.md", "CONTEXT.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Aitor Rioja"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+# Libro: CC BY-NC 4.0.
+[[annotations]]
+path = "static/libro/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025 Aitor Rioja"
+SPDX-License-Identifier = "CC-BY-NC-4.0"

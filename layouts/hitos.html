@@ -1,0 +1,12 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ range sort hugo.Data.milestones "date" "desc" }}
+<article id="{{ .id }}" class="milestone">
+  <h2>{{ partial "tr.html" .title }}</h2>
+  <p class="meta"><time datetime="{{ .date }}">{{ partial "datefmt.html" .date }}</time> <span>{{ i18n (printf "type_%s" .type) }}</span></p>
+  <p>{{ partial "tr.html" .summary }}</p>
+  <p>{{ i18n "evidence" }}: <a href="{{ .evidence }}">{{ .evidence }}</a></p>
+  {{ with .tags }}<ul class="tags">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>{{ end }}
+</article>
+{{ end }}
+{{ end }}

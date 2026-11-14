@@ -1,0 +1,5 @@
+{{- /* Fecha de última modificación del contenido. En el workflow, HUGO_LASTMOD sale del último commit
+       que toca data/, content/, i18n/ o static/libro/. En local, si no existe, se usa la hora actual. */ -}}
+{{- $m := os.Getenv "HUGO_LASTMOD" -}}
+{{- if not $m -}}{{- $m = now.UTC.Format "2006-01-02T15:04:05Z" -}}{{- end -}}
+{{- return $m -}}

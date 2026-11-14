@@ -1,0 +1,9 @@
+{{- /* AAAA, AAAA-MM o AAAA-MM-DD a texto legible en el idioma de la página. */ -}}
+{{- $d := printf "%v" . -}}
+{{- $r := $d -}}
+{{- if eq (len $d) 7 -}}
+  {{- $r = time.Format "January 2006" (time.AsTime (printf "%s-01" $d)) -}}
+{{- else if eq (len $d) 10 -}}
+  {{- $r = time.Format ":date_long" (time.AsTime $d) -}}
+{{- end -}}
+{{- return $r -}}

@@ -1,0 +1,14 @@
+# Hitos y logros en IA. Ordenados por fecha en la plantilla; el orden aquí no importa.
+# date: AAAA-MM o AAAA-MM-DD. type: publication | certification | project | talk | award | other
+# evidence: URL verificable.
+- id: 2025-10-libro-charlando-con-la-ia
+  date: "2025-10"
+  type: publication
+  title:
+    es: "Publicación del libro «Charlando con la IA»"
+    en: "Publication of the book “Charlando con la IA”"
+  summary:
+    es: "Guía práctica de prompting en español, de descarga gratuita bajo licencia CC BY-NC 4.0. Incluye 18 lecciones con ejercicios, un glosario y un test final."
+    en: "Practical guide to prompting in Spanish, free to download under a CC BY-NC 4.0 licence. It includes 18 lessons with exercises, a glossary and a final test."
+  evidence: https://aitorrioja.com/libro/
+  tags: [prompt-engineering, llm]

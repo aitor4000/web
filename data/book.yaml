@@ -1,0 +1,42 @@
+id: charlando-con-la-ia
+title: { es: "Charlando con la IA", en: "Charlando con la IA" }
+subtitle:
+  es: "Una guía práctica para el uso de asistentes de IA"
+  en: "A practical guide to using AI assistants"
+language: es
+version: "1.0"
+date_published: "2025-10"
+free: true
+license:
+  name: "CC BY-NC 4.0"
+  url: https://creativecommons.org/licenses/by-nc/4.0/
+synopsis:
+  es: "Guía práctica de prompting para asistentes de IA generalistas. Cada lección introduce un principio, lo demuestra con un ejemplo y propone una tarea práctica con un prompt de revisión. Incluye un prólogo sobre los principales asistentes, un glosario y un test final de diez ítems."
+  en: "Practical guide to prompting general-purpose AI assistants. Each lesson introduces a principle, shows it with an example and sets a practical task with a review prompt. It includes a foreword on the main assistants, a glossary and a ten-item final test. The text is in Spanish."
+lessons:
+  - { n: 0, es: "Introducción al libro", en: "Introduction to the book" }
+  - { n: 1, es: "Principio de especificidad", en: "The specificity principle" }
+  - { n: 2, es: "Rol y contexto", en: "Role and context" }
+  - { n: 3, es: "Estructura de un buen prompt", en: "Structure of a good prompt" }
+  - { n: 4, es: "Creatividad y estilo", en: "Creativity and style" }
+  - { n: 5, es: "Iteración controlada", en: "Controlled iteration" }
+  - { n: 6, es: "Modularidad y control", en: "Modularity and control" }
+  - { n: 7, es: "Flexibilidad en tiempo real", en: "Real-time flexibility" }
+  - { n: 8, es: "Ejercicios temáticos", en: "Thematic exercises" }
+  - { n: 9, es: "Flujo conversacional guiado", en: "Guided conversational flow" }
+  - { n: 10, es: "Pensamiento estratégico", en: "Strategic thinking" }
+  - { n: 11, es: "Multipropósito", en: "Multipurpose prompts" }
+  - { n: 12, es: "Iteración estructurada", en: "Structured iteration" }
+  - { n: 13, es: "Visualización estructural", en: "Structural visualisation" }
+  - { n: 14, es: "Sistemas reflexivos", en: "Reflective systems" }
+  - { n: 15, es: "Adaptación contextual", en: "Contextual adaptation" }
+  - { n: 16, es: "Implementación técnica", en: "Technical implementation" }
+  - { n: 17, es: "Evaluación y refinamiento iterativo", en: "Evaluation and iterative refinement" }
+  - { n: 18, es: "Prompt multiplano-anidado", en: "Multi-layer nested prompts" }
+# Formatos descargables. Vacío hasta que exista el PDF definitivo en static/libro/ (Fase 3).
+# - format: PDF
+#   mime: application/pdf
+#   url: /libro/aitor-rioja-charlando-con-la-ia.pdf
+#   size: "6,4 MB"        # texto mostrado
+#   size_bytes: 6660343   # para JSON-LD
+formats: []

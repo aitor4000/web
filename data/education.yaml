@@ -1,0 +1,6 @@
+# Formación. Lista vacía: no se genera sección ni alumniOf.
+# - institution: { es: "...", en: "..." }
+#   title: { es: "...", en: "..." }
+#   start: AAAA
+#   end: AAAA
+[]

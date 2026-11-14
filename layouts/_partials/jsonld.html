@@ -1,0 +1,95 @@
+{{- /* Un único @graph por página, con @id estables. Las propiedades vacías no se emiten. */ -}}
+{{- $base := strings.TrimSuffix "/" site.BaseURL -}}
+{{- $personID := printf "%s/#person" $base -}}
+{{- $siteID := printf "%s/#website" $base -}}
+{{- $lang := site.Language.Lang -}}
+{{- $mod := partial "lastmod.html" . -}}
+{{- $p := hugo.Data.profile -}}
+
+{{- $person := dict
+  "@type" "Person" "@id" $personID
+  "name" $p.name "givenName" $p.givenName "familyName" $p.familyName
+  "url" (printf "%s/" $base)
+  "description" (partial "tr.html" $p.bio)
+  "email" (printf "mailto:%s" $p.email)
+  "address" (dict "@type" "PostalAddress" "addressLocality" $p.location.city "addressCountry" $p.location.country) -}}
+
+{{- $ka := slice -}}
+{{- range $p.knowsAbout -}}{{- $ka = $ka | append (partial "tr.html" .) -}}{{- end -}}
+{{- with $ka -}}{{- $person = merge $person (dict "knowsAbout" .) -}}{{- end -}}
+
+{{- $kl := slice -}}
+{{- range $p.languages -}}{{- $kl = $kl | append .code -}}{{- end -}}
+{{- with $kl -}}{{- $person = merge $person (dict "knowsLanguage" .) -}}{{- end -}}
+
+{{- $sa := slice -}}
+{{- range $p.links -}}{{- if .same_as -}}{{- $sa = $sa | append .url -}}{{- end -}}{{- end -}}
+{{- with $sa -}}{{- $person = merge $person (dict "sameAs" .) -}}{{- end -}}
+
+{{- $alumni := slice -}}
+{{- range hugo.Data.education -}}
+  {{- $alumni = $alumni | append (dict "@type" "EducationalOrganization" "name" (partial "tr.html" .institution)) -}}
+{{- end -}}
+{{- with $alumni -}}{{- $person = merge $person (dict "alumniOf" .) -}}{{- end -}}
+
+{{- $creds := slice -}}
+{{- range hugo.Data.credentials -}}
+  {{- $c := dict "@type" "EducationalOccupationalCredential" "name" (partial "tr.html" .name) "credentialCategory" "certificate" -}}
+  {{- with .issuer -}}{{- $c = merge $c (dict "recognizedBy" (dict "@type" "Organization" "name" .)) -}}{{- end -}}
+  {{- with .date -}}{{- $c = merge $c (dict "dateCreated" (printf "%v" .)) -}}{{- end -}}
+  {{- with .url -}}{{- $c = merge $c (dict "url" .) -}}{{- end -}}
+  {{- $creds = $creds | append $c -}}
+{{- end -}}
+{{- with $creds -}}{{- $person = merge $person (dict "hasCredential" .) -}}{{- end -}}
+
+{{- $awards := slice -}}
+{{- range hugo.Data.milestones -}}{{- if eq .type "award" -}}{{- $awards = $awards | append (partial "tr.html" .title) -}}{{- end -}}{{- end -}}
+{{- with $awards -}}{{- $person = merge $person (dict "award" .) -}}{{- end -}}
+
+{{- $website := dict
+  "@type" "WebSite" "@id" $siteID
+  "url" (printf "%s/" $base) "name" $p.name
+  "inLanguage" (slice "es" "en")
+  "publisher" (dict "@id" $personID) -}}
+
+{{- $pageType := "WebPage" -}}
+{{- if .IsHome -}}{{- $pageType = "ProfilePage" -}}{{- end -}}
+{{- $page := dict
+  "@type" $pageType "@id" (printf "%s#webpage" .Permalink)
+  "url" .Permalink "name" .Title "inLanguage" $lang
+  "isPartOf" (dict "@id" $siteID)
+  "dateModified" $mod -}}
+{{- if .IsHome -}}
+  {{- $page = merge $page (dict "mainEntity" (dict "@id" $personID)) -}}
+{{- else -}}
+  {{- $page = merge $page (dict "about" (dict "@id" $personID)) -}}
+{{- end -}}
+
+{{- $graph := slice $website $person $page -}}
+
+{{- if eq .Layout "libro" -}}
+  {{- $b := hugo.Data.book -}}
+  {{- $bookID := printf "%s/libro/#book" $base -}}
+  {{- $book := dict
+    "@type" "Book" "@id" $bookID
+    "name" (partial "tr.html" $b.title)
+    "alternativeName" (printf "%s: %s" (partial "tr.html" $b.title) (partial "tr.html" $b.subtitle))
+    "description" (partial "tr.html" $b.synopsis)
+    "url" .Permalink
+    "author" (dict "@id" $personID)
+    "inLanguage" $b.language
+    "datePublished" (printf "%v" $b.date_published)
+    "license" $b.license.url
+    "isAccessibleForFree" $b.free -}}
+  {{- $media := slice -}}
+  {{- range $b.formats -}}
+    {{- $m := dict "@type" "MediaObject" "contentUrl" (printf "%s%s" $base .url) "encodingFormat" .mime -}}
+    {{- with .size_bytes -}}{{- $m = merge $m (dict "contentSize" (printf "%v B" .)) -}}{{- end -}}
+    {{- $media = $media | append $m -}}
+  {{- end -}}
+  {{- with $media -}}{{- $book = merge $book (dict "associatedMedia" .) -}}{{- end -}}
+  {{- $page = merge $page (dict "mainEntity" (dict "@id" $bookID)) -}}
+  {{- $graph = slice $website $person $page $book -}}
+{{- end -}}
+
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" $graph | jsonify | safeJS }}</script>

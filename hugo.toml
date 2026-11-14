@@ -1,6 +1,77 @@
-# Fase 1: configuración mínima. Solo genera la portada de prueba.
+# Configuración de aitorrioja.com. Español en la raíz, inglés en /en/.
 baseURL = "https://aitorrioja.com/"
-locale = "es-ES"
-defaultContentLanguage = "es"
 title = "Aitor Rioja"
-disableKinds = ["section", "taxonomy", "term", "rss", "sitemap", "robotstxt", "404"]
+defaultContentLanguage = "es"
+defaultContentLanguageInSubdir = false
+enableRobotsTXT = true
+disableHugoGeneratorInject = true
+disableKinds = ["taxonomy", "term"]
+
+[params]
+  # Mientras sea true, todas las páginas llevan <meta name="robots" content="noindex">.
+  # Se pone a false al cerrar la Fase 4 (validación), antes de dar de alta el sitio en buscadores.
+  noindex = true
+  email = "contact@aitorrioja.com"
+  defaultLang = "es"
+  ogImage = "img/og.png"
+  licenseContent = "https://creativecommons.org/licenses/by/4.0/"
+  licenseCode = "https://opensource.org/license/mit"
+  licenseBook = "https://creativecommons.org/licenses/by-nc/4.0/"
+  repo = "https://github.com/aitor4000/web"
+
+[markup.goldmark.renderer]
+  unsafe = false
+
+# Salidas adicionales de la portada, generadas desde data/.
+[outputFormats.resume]
+  mediaType = "application/json"
+  baseName = "resume"
+  isPlainText = true
+  notAlternative = true
+
+[outputFormats.llms]
+  mediaType = "text/plain"
+  baseName = "llms"
+  isPlainText = true
+  notAlternative = true
+
+[outputs]
+  home = ["html", "resume", "llms"]
+  section = ["html"]
+  page = ["html"]
+
+[languages.es]
+  label = "Español"
+  locale = "es-ES"
+  weight = 1
+  contentDir = "content/es"
+  [[languages.es.menus.main]]
+    name = "CV"
+    pageRef = "/cv"
+    weight = 10
+  [[languages.es.menus.main]]
+    name = "Hitos"
+    pageRef = "/hitos"
+    weight = 20
+  [[languages.es.menus.main]]
+    name = "Libro"
+    pageRef = "/libro"
+    weight = 30
+
+[languages.en]
+  label = "English"
+  locale = "en-GB"
+  weight = 2
+  contentDir = "content/en"
+  [[languages.en.menus.main]]
+    name = "CV"
+    pageRef = "/cv"
+    weight = 10
+  [[languages.en.menus.main]]
+    name = "Milestones"
+    pageRef = "/hitos"
+    weight = 20
+  [[languages.en.menus.main]]
+    name = "Book"
+    pageRef = "/libro"
+    weight = 30

@@ -1,0 +1,39 @@
+{{ define "main" }}
+{{ $b := hugo.Data.book }}
+<article>
+  <h1>{{ partial "tr.html" $b.title }}</h1>
+  <p class="lead">{{ partial "tr.html" $b.subtitle }}</p>
+  <p>{{ partial "tr.html" $b.synopsis }}</p>
+
+  <dl class="facts-list">
+    <dt>{{ i18n "author" }}</dt><dd>{{ hugo.Data.profile.name }}</dd>
+    <dt>{{ i18n "language" }}</dt><dd>{{ range hugo.Data.profile.languages }}{{ if eq .code $b.language }}{{ partial "tr.html" .name }}{{ end }}{{ end }}</dd>
+    <dt>{{ i18n "version" }}</dt><dd>{{ $b.version }}</dd>
+    <dt>{{ i18n "published" }}</dt><dd><time datetime="{{ $b.date_published }}">{{ partial "datefmt.html" $b.date_published }}</time></dd>
+    <dt>{{ i18n "license" }}</dt><dd><a rel="license" href="{{ $b.license.url }}">{{ $b.license.name }}</a></dd>
+    <dt>{{ i18n "price" }}</dt><dd>{{ if $b.free }}{{ i18n "free" }}{{ end }}</dd>
+  </dl>
+
+  <section aria-labelledby="h-dl">
+    <h2 id="h-dl">{{ i18n "download" }}</h2>
+    {{ with $b.formats }}
+    <ul class="plain">
+      {{ range . }}<li><a href="{{ .url }}">{{ $b.title.es }} ({{ .format }}, {{ .size }})</a></li>
+      {{ end }}
+    </ul>
+    {{ else }}
+    <p>{{ i18n "downloadPending" }}</p>
+    {{ end }}
+    <p>{{ i18n "commercialUse" }} <a href="mailto:{{ site.Params.email }}">{{ site.Params.email }}</a>.</p>
+  </section>
+
+  <section aria-labelledby="h-cont">
+    <h2 id="h-cont">{{ i18n "contents" }}</h2>
+    <ol start="0" class="lessons">
+      {{ range $b.lessons }}<li>{{ partial "tr.html" . }}</li>
+      {{ end }}
+    </ol>
+    <p>{{ i18n "finalTest" }}.</p>
+  </section>
+</article>
+{{ end }}

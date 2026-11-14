@@ -1,0 +1,18 @@
+{{- $p := hugo.Data.profile -}}
+{{- $b := hugo.Data.book -}}
+# {{ $p.name }}
+
+> {{ partial "tr.html" $p.headline }}
+
+{{ partial "tr.html" $p.bio }}
+
+{{ if eq site.Language.Lang "es" }}## Secciones{{ else }}## Sections{{ end }}
+
+{{ range site.Menus.main -}}
+- [{{ .Name }}]({{ .Page.Permalink }})
+{{ end -}}
+- [JSON Resume]({{ (site.Home.OutputFormats.Get "resume").Permalink }})
+{{ with site.GetPage "hitos" }}{{ with .OutputFormats.Get "rss" }}- [{{ i18n "feedTitle" }}]({{ .Permalink }})
+{{ end }}{{ end }}
+
+{{ i18n "contact" }}: {{ $p.email }}

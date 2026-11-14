@@ -69,7 +69,7 @@ check_http() {
   r=$(curl -sS -o /dev/null --max-time 20 -w '%{http_code} %{redirect_url}' "http://${D}/" 2>&1)
   [ "$r" = "301 ${CANON}" ] && ok "HTTP redirige con 301 a HTTPS" || ko "HTTP a HTTPS: '${r}' (¿Enforce HTTPS activado?)"
 
-  curl -sS --max-time 20 "$CANON" | grep -q '<h1>Aitor Rioja</h1>' && ok "el contenido se lee sin JavaScript" || ko "no aparece el h1 esperado"
+  curl -sS --max-time 20 "$CANON" | grep -q 'Aitor Rioja</h1>' && ok "el contenido se lee sin JavaScript" || ko "no aparece el h1 esperado"
 }
 
 case "$modo" in

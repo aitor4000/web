@@ -1,0 +1,6 @@
+# Experiencia. Cargo idéntico al de LinkedIn; el empleador se describe, no se nombra.
+# start/end: AAAA-MM. Sin end, el puesto figura como actual. Sin start, no se muestra fecha.
+- role: { es: "Sales Manager", en: "Sales Manager" }
+  organization:
+    es: "Empresa del sector de la desalación y el tratamiento de aguas industriales"
+    en: "Company in the desalination and industrial water treatment sector"
