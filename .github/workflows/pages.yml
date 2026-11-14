@@ -46,7 +46,10 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0  # historial completo: fechas de modificación reales desde git
-
+     
+      - name: Fecha de última modificación del contenido
+        run: echo "HUGO_LASTMOD=$(git log -1 --format=%cI -- data content i18n static/libro)" >> "${GITHUB_ENV}"
+      
       - name: Configurar Pages
         uses: actions/configure-pages@v6
 
